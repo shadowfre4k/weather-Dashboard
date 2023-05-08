@@ -1,0 +1,14 @@
+article {
+  display: flex;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  flex-wrap: wrap;
+  background-color: aquamarine;
+}
+
+input {
+  display: flex;
+}
