@@ -60,7 +60,16 @@ var getForecast = function (lat, lon) {
   fetch(forecastApi).then(function (response) {
     //fetches data from forecast API
     response.json().then(function (data) {
-      console.log(data); // console log data to check and make sure data is collected.
+      var cloud = data.list[0].clouds.all; //set path to clouds
+      var temp = (data.list[0].main.temp - 273.15) * (9 / 5) + 32; //set path for temp in Fahrenheit
+      var wind = data.list[0].wind.speed; // set path for wind speed
+      var humidity = data.list[0].main.humidity;
+      // console log data to check and make sure all variables are collecting desired stats
+      console.log(data);
+      console.log(cloud);
+      console.log(temp);
+      console.log(wind);
+      console.log(humidity);
     });
   });
 };
