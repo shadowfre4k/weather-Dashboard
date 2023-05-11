@@ -1,10 +1,6 @@
 //element queries
-
-var containerEl = document.querySelector(".continer");
 var searchBarEl = document.querySelector(".searchBarCity");
 var searchBtnEl = document.querySelector(".searchBtn");
-var cityDisplayEl = document.querySelector(".cityDisplay");
-var froecastEl = document.querySelector(".forecast");
 
 var buttonClickHandler = function (event) {
   //on click handler function will say clickered when the button is clicked to verify it is being clicked
@@ -24,11 +20,6 @@ var fetchCityLatLon = function (city) {
   var geoCodingApi = //api URL to find coordinates of inputted city
     "http://api.openweathermap.org/geo/1.0/direct?q=" +
     city +
-    // "," +
-    // stateCode +
-    // "," +
-    // countryCode +
-    // "," +
     "&limit=5&appid=81e5e2aa364dbd692cb7ce5124ace8ee";
 
   fetch(geoCodingApi).then(function (response) {
@@ -57,40 +48,55 @@ var fetchForecast = function (lat, lon) {
     //fetches data from forecast API
     response.json().then(function (data) {
       var city = data.city.name;
-      var cloud = data.list[0].clouds.all; //set path to clouds
-      var temp = (data.list[0].main.temp - 273.15) * (9 / 5) + 32; //set path for temp in Fahrenheit
-      var wind = data.list[0].wind.speed * 2.237; // set path for wind speed
-      var humidity = data.list[0].main.humidity;
-      // console log data to check and make sure all variables are collecting desired stats
-      console.log(data);
-      console.log(city);
-      console.log("cloud %: " + cloud);
-      console.log("temperature in F: " + temp);
-      console.log("Wind m/s " + wind);
-      console.log("Humidity %: " + humidity);
+      for (var i = 0; i < 6; i++) {
+        var cloud = data.list[i].clouds.all; //set path to clouds
+        var temp = (data.list[i].main.temp - 273.15) * (9 / 5) + 32; //set path for temp in Fahrenheit
+        var wind = data.list[i].wind.speed * 2.237; // set path for wind speed
+        var humidity = data.list[i].main.humidity; //set path for humidity
 
-      storeCity(city, cloud, temp, wind, humidity);
+        displayZeroDayForecast(city, cloud, temp, wind, humidity);
+      }
+      storeCity(city);
     });
   });
 };
 
-var storeCity = function (city, cloud, temp, wind, humidty) {
+var displayZeroDayForecast = function (
+  cityName,
+  cloudCover,
+  tempDeg,
+  windSpeed,
+  humidityPer
+) {
+  console.log("display");
+};
+
+var storeCity = function (cityName) {
+  var cityObj = {
+    city: cityName,
+  };
   var cities = JSON.parse(localStorage.getItem("cities") || "[]");
-  console.log("# of cities: " + cities.length);
-  cities.forEach(function (city, index) {
-    console.log("[" + index + "]: " + city.name);
+  cities.forEach(function (cityObj, index) {
+    console.log("[" + index + "]: " + cityObj.city);
   });
 
-  var city = {
-    name: city,
-    cloudCover: cloud,
-    tempF: temp,
-    windSpeed: wind,
-    humidPer: humidty,
-  };
+  // Modifying
 
-  cities.push(city);
-  console.log(cities);
+  cities.push(cityObj);
+  console.log("Added city #" + cityObj.city);
+
+  // Saving
+  localStorage.setItem("cities", JSON.stringify(cities));
+
+  historyButton(cityObj.city);
 };
 
 searchBtnEl.addEventListener("click", buttonClickHandler); //event handler for search button
+
+var historyButton = function (cityName) {
+  var ulEl = document.querySelector("ul");
+  var liEl = document.createElement("button");
+  liEl.textContent = cityName;
+
+  ulEl.appendChild(liEl);
+};
