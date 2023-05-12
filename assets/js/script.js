@@ -2,7 +2,6 @@ var searchBtn = document.querySelector("#searchBtn");
 
 var buttonClickHandler = function (event) {
   // takes in the value typed in the search bar
-
   var searchBarEl = document.querySelector("input");
   var cityNameEl = document.querySelector("#cityName");
   var cityName = searchBarEl.value.trim();
@@ -24,8 +23,8 @@ var buttonClickHandler = function (event) {
   }
 };
 
+//function that takes in the input city name
 var fetchCityLatLon = function (city) {
-  //function that takes in the input city name
   var geoCodingApi = //api URL to find coordinates of inputted city
     "http://api.openweathermap.org/geo/1.0/direct?q=" +
     city +
@@ -51,10 +50,8 @@ var fetchForecast = function (lat, lon) {
     "&lon=" +
     lon +
     "&appid=81e5e2aa364dbd692cb7ce5124ace8ee";
-
+  //fetches data from forecast API
   fetch(forecastApi).then(function (response) {
-    //fetches data from forecast API
-
     response.json().then(function (data) {
       for (var i = 0; i < 6; i++) {
         console.log(data);
