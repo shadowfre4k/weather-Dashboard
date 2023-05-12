@@ -1,19 +1,4 @@
-//element queries
-var searchBarEl = document.querySelector(".searchBarCity");
-var searchBtnEl = document.querySelector(".searchBtn");
-
-var buttonClickHandler = function (event) {
-  //on click handler function will say clickered when the button is clicked to verify it is being clicked
-  event.preventDefault();
-  console.log("Clickered");
-
-  var cityName = searchBarEl.value.trim(); // takes in the value typed in the search bar
-
-  if (cityName) {
-    // passes city name that was typed into the function
-    fetchCityLatLon(cityName);
-  }
-};
+var searchBtn = document.querySelector("#searchBtn");
 
 var fetchCityLatLon = function (city) {
   //function that takes in the input city name
@@ -21,9 +6,8 @@ var fetchCityLatLon = function (city) {
     "http://api.openweathermap.org/geo/1.0/direct?q=" +
     city +
     "&limit=5&appid=81e5e2aa364dbd692cb7ce5124ace8ee";
-
+  //fetches data from geoCoding API
   fetch(geoCodingApi).then(function (response) {
-    //fetches data from geoCoding API
     response.json().then(function (data) {
       var geoLat = data[0].lat; //sets latitude to variable
       var geoLon = data[0].lon; // sets longitude to variable
@@ -46,57 +30,42 @@ var fetchForecast = function (lat, lon) {
 
   fetch(forecastApi).then(function (response) {
     //fetches data from forecast API
-    response.json().then(function (data) {
-      var city = data.city.name;
-      for (var i = 0; i < 6; i++) {
-        var cloud = data.list[i].clouds.all; //set path to clouds
-        var temp = (data.list[i].main.temp - 273.15) * (9 / 5) + 32; //set path for temp in Fahrenheit
-        var wind = data.list[i].wind.speed * 2.237; // set path for wind speed
-        var humidity = data.list[i].main.humidity; //set path for humidity
 
-        displayZeroDayForecast(city, cloud, temp, wind, humidity);
+    response.json().then(function (data) {
+      for (var i = 0; i < 6; i++) {
+        console.log(data);
+
+        var cloudEl = document.querySelector("#day-" + [i] + "cityCloud");
+        cloudEl.innerHTML = data.list[i].weather[0].icon;
+
+        var tempEl = document.querySelector("#day-" + [i] + "cityTemp");
+        tempEl.innerHTML = (data.list[i].main.temp - 273.15) * (9 / 5) + 32;
+
+        var windEl = document.querySelector("#day-" + [i] + "cityWind");
+        windEl.innerHTML = data.list[i].wind.speed * 2.237; // set path for wind speed
+
+        var humidEl = document.querySelector("#day-" + [i] + "cityHumid");
+        humidEl.innerHTML = data.list[i].main.humidity;
       }
-      storeCity(city);
     });
   });
 };
 
-var displayZeroDayForecast = function (
-  cityName,
-  cloudCover,
-  tempDeg,
-  windSpeed,
-  humidityPer
-) {
-  console.log("display");
+var buttonClickHandler = function (event) {
+  // takes in the value typed in the search bar
+
+  var searchBarEl = document.querySelector("input");
+  var cityNameEl = document.querySelector("#cityName");
+  var cityName = searchBarEl.value.trim();
+  cityNameEl.innerHTML = cityName;
+
+  // passes city name that was typed into the function
+  if (cityName) {
+    fetchCityLatLon(cityName);
+  }
 };
 
-var storeCity = function (cityName) {
-  var cityObj = {
-    city: cityName,
-  };
-  var cities = JSON.parse(localStorage.getItem("cities") || "[]");
-  cities.forEach(function (cityObj, index) {
-    console.log("[" + index + "]: " + cityObj.city);
-  });
-
-  // Modifying
-
-  cities.push(cityObj);
-  console.log("Added city #" + cityObj.city);
-
-  // Saving
-  localStorage.setItem("cities", JSON.stringify(cities));
-
-  historyButton(cityObj.city);
-};
-
-searchBtnEl.addEventListener("click", buttonClickHandler); //event handler for search button
-
-var historyButton = function (cityName) {
-  var ulEl = document.querySelector("ul");
-  var liEl = document.createElement("button");
-  liEl.textContent = cityName;
-
-  ulEl.appendChild(liEl);
-};
+//event listener for Search Button
+searchBtn.addEventListener("click", function () {
+  buttonClickHandler();
+});
