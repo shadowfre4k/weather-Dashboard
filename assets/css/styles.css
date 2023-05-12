@@ -1,3 +1,18 @@
+* {
+  text-align: center;
+  justify-content: space-evenly;
+}
+
+header {
+  color: white;
+}
+
 ul {
+  color: black;
+  background-color: bisque;
   list-style: none;
+}
+
+li {
+  text-align: center;
 }

@@ -19,6 +19,7 @@ var buttonClickHandler = function (event) {
   // passes city name that was typed into the function
   if (cityName) {
     fetchCityLatLon(cityName);
+    console.log(cityName);
     addHistory(cityName);
   }
 };
@@ -63,13 +64,14 @@ var fetchForecast = function (lat, lon) {
           "@2x.png";
         //locates temperature and  put on page
         var tempEl = document.querySelector("#day-" + [i] + "cityTemp");
-        tempEl.innerHTML = (data.list[i].main.temp - 273.15) * (9 / 5) + 32;
+        tempEl.innerHTML =
+          "Temperature:" + (data.list[i].main.temp - 273.15) * (9 / 5) + 32;
         //locates wind and  put on page
         var windEl = document.querySelector("#day-" + [i] + "cityWind");
-        windEl.innerHTML = data.list[i].wind.speed * 2.237;
+        windEl.innerHTML = "Wind Speed:" + data.list[i].wind.speed * 2.237;
         //locates humidity and  put on page
         var humidEl = document.querySelector("#day-" + [i] + "cityHumid");
-        humidEl.innerHTML = data.list[i].main.humidity;
+        humidEl.innerHTML = "Humidity:" + data.list[i].main.humidity;
       }
     });
   });
