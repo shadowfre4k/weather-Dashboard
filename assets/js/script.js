@@ -27,7 +27,7 @@ var buttonClickHandler = function (event) {
 //function that takes in the input city name
 var fetchCityLatLon = function (city) {
   var geoCodingApi = //api URL to find coordinates of inputted city
-    "http://api.openweathermap.org/geo/1.0/direct?q=" +
+    "https://api.openweathermap.org/geo/1.0/direct?q=" +
     city +
     "&limit=5&appid=81e5e2aa364dbd692cb7ce5124ace8ee";
   //fetches data from geoCoding API
@@ -46,7 +46,7 @@ var fetchForecast = function (lat, lon) {
   console.log(lon); //check to see if coordinates pass
   console.log(lat);
   var forecastApi = //forecast API
-    " http://api.openweathermap.org/data/2.5/forecast?lat=" +
+    " https://api.openweathermap.org/data/2.5/forecast?lat=" +
     lat +
     "&lon=" +
     lon +
