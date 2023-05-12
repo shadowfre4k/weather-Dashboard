@@ -24,16 +24,16 @@ https://github.com/shadowfre4k/weather-Dashboard
 
    https://shadowfre4k.github.io/Calender-project/
 
-   ![Homepage Weather](assets/images/Screenshot 1.png)
+   ![Homepage Weather](./assets/images/screenshot%201.png)
 
 2. You can type in the name of the city and hit search
 
-   ![Input Events](assets/images/Screenshot 2.png)
+   ![Input Events](./assets/images/screenshot%202.png)
 
-3. Will display details about the city and the forecast for the next five days
+3. Will display details about the city and the forecast for the next five days and store data locally
 
-   ![display forecast](assets/images/Screenshot 3.png)
+   ![display forecast](./assets/images/screenshot%203.png)
 
 4. you can also see the Past search terms in the history section (functionallity to click them and have the city reappear is TBD)
 
-   ![saved history](assets/images/Screenshot 4.png)
+   ![saved history](./assets/images/screenshot%204.png)
