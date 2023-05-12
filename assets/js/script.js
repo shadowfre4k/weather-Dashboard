@@ -1,5 +1,29 @@
 var searchBtn = document.querySelector("#searchBtn");
 
+var buttonClickHandler = function (event) {
+  // takes in the value typed in the search bar
+
+  var searchBarEl = document.querySelector("input");
+  var cityNameEl = document.querySelector("#cityName");
+  var cityName = searchBarEl.value.trim();
+  cityNameEl.innerHTML = cityName;
+
+  //store locally
+  var cities = JSON.parse(localStorage.getItem("cities") || "[]");
+  cities.forEach(function (cityName, index) {
+    console.log("[" + index + "]: " + cityName);
+  });
+
+  cities.push(cityName);
+  localStorage.setItem("cities", JSON.stringify(cities));
+
+  // passes city name that was typed into the function
+  if (cityName) {
+    fetchCityLatLon(cityName);
+    addHistory(cityName);
+  }
+};
+
 var fetchCityLatLon = function (city) {
   //function that takes in the input city name
   var geoCodingApi = //api URL to find coordinates of inputted city
@@ -34,19 +58,19 @@ var fetchForecast = function (lat, lon) {
     response.json().then(function (data) {
       for (var i = 0; i < 6; i++) {
         console.log(data);
-
+        //locates cloud and  put on page
         var cloudEl = document.querySelector("#day-" + [i] + "cityCloud");
         cloudEl.src =
           "https://openweathermap.org/img/wn/" +
           data.list[i].weather[0].icon +
           "@2x.png";
-
+        //locates temperature and  put on page
         var tempEl = document.querySelector("#day-" + [i] + "cityTemp");
         tempEl.innerHTML = (data.list[i].main.temp - 273.15) * (9 / 5) + 32;
-
+        //locates wind and  put on page
         var windEl = document.querySelector("#day-" + [i] + "cityWind");
-        windEl.innerHTML = data.list[i].wind.speed * 2.237; // set path for wind speed
-
+        windEl.innerHTML = data.list[i].wind.speed * 2.237;
+        //locates humidity and  put on page
         var humidEl = document.querySelector("#day-" + [i] + "cityHumid");
         humidEl.innerHTML = data.list[i].main.humidity;
       }
@@ -54,21 +78,29 @@ var fetchForecast = function (lat, lon) {
   });
 };
 
-var buttonClickHandler = function (event) {
-  // takes in the value typed in the search bar
-
-  var searchBarEl = document.querySelector("input");
-  var cityNameEl = document.querySelector("#cityName");
-  var cityName = searchBarEl.value.trim();
-  cityNameEl.innerHTML = cityName;
-
-  // passes city name that was typed into the function
-  if (cityName) {
-    fetchCityLatLon(cityName);
+//displays history on refresh
+var displayHistory = function () {
+  var cities = JSON.parse(localStorage.getItem("cities") || "[]");
+  for (i = 0; i < cities.length; i++) {
+    var historyEl = document.getElementById("history");
+    var p = document.createElement("p");
+    p.innerHTML = cities[i];
+    historyEl.append(p);
   }
+};
+
+//function for adding to the history after button push
+var addHistory = function (cityName) {
+  var historyEl = document.getElementById("history");
+  var p = document.createElement("p");
+  p.innerHTML = cityName;
+  historyEl.append(p);
 };
 
 //event listener for Search Button
 searchBtn.addEventListener("click", function () {
   buttonClickHandler();
 });
+
+//evoke history function
+displayHistory();
