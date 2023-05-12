@@ -36,7 +36,10 @@ var fetchForecast = function (lat, lon) {
         console.log(data);
 
         var cloudEl = document.querySelector("#day-" + [i] + "cityCloud");
-        cloudEl.innerHTML = data.list[i].weather[0].icon;
+        cloudEl.src =
+          "https://openweathermap.org/img/wn/" +
+          data.list[i].weather[0].icon +
+          "@2x.png";
 
         var tempEl = document.querySelector("#day-" + [i] + "cityTemp");
         tempEl.innerHTML = (data.list[i].main.temp - 273.15) * (9 / 5) + 32;
